@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triângulo Potência | 1º Ano - Fundamentos da Matemática</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'space': ['Space Grotesk', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'math-dark': '#0a0a0f',
+                        'math-card': '#12121a',
+                        'math-accent': '#6366f1',
+                        'math-secondary': '#8b5cf6',
+                        'math-glow': '#a855f7',
+                        'success': '#10b981',
+                        'warning': '#f59e0b',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'gradient': 'gradient 15s ease infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0f;
+            color: #e2e8f0;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(18, 18, 26, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3), 0 0 40px rgba(139, 92, 246, 0.2);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+        
+        .number-line {
+            background: linear-gradient(to right, #6366f1, #8b5cf6);
+            height: 4px;
+            border-radius: 2px;
+            position: relative;
+        }
+        
+        .number-point {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border: 3px solid #6366f1;
+            border-radius: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .number-point:hover {
+            transform: translate(-50%, -50%) scale(1.3);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+        }
+        
+        .exercise-card {
+            background: linear-gradient(145deg, #12121a 0%, #1a1a2e 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .exercise-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+        }
+        
+        .mind-map-node {
+            background: rgba(99, 102, 241, 0.1);
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .mind-map-node:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: #6366f1;
+            transform: scale(1.05);
+        }
+        
+        .step-indicator {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+        
+        .geometric-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.02;
+            background-image: 
+                repeating-linear-gradient(45deg, #6366f1 0, #6366f1 1px, transparent 0, transparent 50%);
+            background-size: 20px 20px;
+        }
+        
+        .set-venn {
+            fill: rgba(99, 102, 241, 0.2);
+            stroke: #6366f1;
+            stroke-width: 2;
+            transition: all 0.3s;
+        }
+        
+        .set-venn:hover {
+            fill: rgba(99, 102, 241, 0.4);
+        }
+        
+        .technique-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            position: relative;
+        }
+        
+        .technique-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.5;
+        }
+        
+        .formula-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #6366f1;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .interactive-number {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 6px;
+            margin: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .interactive-number:hover {
+            background: rgba(99, 102, 241, 0.4);
+            border-color: #6366f1;
+            transform: translateY(-2px);
+        }
+        
+        .check-answer {
+            transition: all 0.3s;
+        }
+        
+        .check-answer.correct {
+            background: rgba(16, 185, 129, 0.2) !important;
+            border-color: #10b981 !important;
+            color: #10b981 !important;
+        }
+        
+        .check-answer.wrong {
+            background: rgba(239, 68, 68, 0.2) !important;
+            border-color: #ef4444 !important;
+            color: #ef4444 !important;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Background -->
+    <div class="geometric-bg"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-effect border-b border-white/10 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 relative">
+                        <svg viewBox="0 0 100 100" class="w-full h-full text-math-accent">
+                            <polygon points="50,5 95,95 5,95" fill="none" stroke="currentColor" stroke-width="3"/>
+                            <text x="50" y="75" text-anchor="middle" fill="currentColor" font-size="40" font-family="Space Grotesk" font-weight="bold">1</text>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="font-space text-xl font-bold text-white">Triângulo<span class="text-math-accent">Potência</span></h1>
+                        <p class="text-xs text-gray-400">1º Ano do Ensino Médio</p>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#conjuntos" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Conjuntos Numéricos</a>
+                    <a href="#potenciacao" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Potenciação</a>
+                    <a href="#algebra" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Álgebra</a>
+                    <a href="#equacoes" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Equações</a>
+                    <a href="#tecnicas" class="text-gray-300 hover:text-white transition-colors text-sm font-medium">Técnicas Cognitivas</a>
+                </div>
+
+                <button class="bg-gradient-to-r from-math-accent to-math-secondary text-white px-5 py-2 rounded-full text-sm font-medium hover:shadow-lg hover:shadow-math-accent/30 transition-all">
+                    Área do Aluno
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-math-accent/10 to-transparent"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-math-accent/10 border border-math-accent/20 text-math-accent text-sm font-medium">
+                        <i class="fas fa-graduation-cap"></i>
+                        Base Nacional Comum Curricular
+                    </div>
+                    
+                    <h1 class="font-space text-5xl lg:text-6xl font-bold leading-tight">
+                        Construindo sua <span class="text-gradient">Base Matemática</span>
+                    </h1>
+                    
+                    <p class="text-xl text-gray-400 leading-relaxed">
+                        Domine os fundamentos essenciais do 1º Ano: conjuntos numéricos, potenciação, álgebra e equações. Metodologia ativa com mapas mentais e resolução guiada.
+                    </p>
+
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <div class="flex items-center gap-2 text-gray-300">
+                            <i class="fas fa-check-circle text-math-accent"></i>
+                            <span>5 Módulos completos</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-gray-300">
+                            <i class="fas fa-check-circle text-math-accent"></i>
+                            <span>50+ exercícios resolvidos</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-gray-300">
+                            <i class="fas fa-check-circle text-math-accent"></i>
+                            <span>Técnicas de memorização</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="glass-effect rounded-3xl p-8 border border-white/10">
+                        <h3 class="font-space text-xl font-bold mb-6 text-center">Seu Progresso</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between mb-2 text-sm">
+                                    <span class="text-gray-300">Conjuntos Numéricos</span>
+                                    <span class="text-math-accent">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between mb-2 text-sm">
+                                    <span class="text-gray-300">Potenciação</span>
+                                    <span class="text-math-accent">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between mb-2 text-sm">
+                                    <span class="text-gray-300">Expressões Algébricas</span>
+                                    <span class="text-math-accent">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between mb-2 text-sm">
+                                    <span class="text-gray-300">Equações</span>
+                                    <span class="text-math-accent">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between mb-2 text-sm">
+                                    <span class="text-gray-300">Sistemas Lineares</span>
+                                    <span class="text-math-accent">0%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="w-full mt-6 bg-gradient-to-r from-math-accent to-math-secondary text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all">
+                            Continuar Estudos
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conjuntos Numéricos -->
+    <section id="conjuntos" class="py-20 bg-math-card/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <span class="text-math-accent font-semibold text-sm uppercase tracking-wider">Módulo 1</span>
+                <h2 class="font-space text-4xl font-bold mt-2 mb-4">Conjuntos Numéricos</h2>
+                <p class="text-gray-400 max-w-2xl">Compreenda a hierarquia dos números e suas propriedades fundamentais através de visualizações interativas.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 mb-12">
+                <!-- Diagrama de Venn -->
+                <div class="glass-effect rounded-2xl p-6 border border-white/10">
+                    <h3 class="font-space text-xl font-bold mb-6 flex items-center gap-2">
+                        <i class="fas fa-project-diagram text-math-accent"></i>
+                        Hierarquia dos Conjuntos
+                    </h3>
+                    
+                    <div class="relative h-80 flex items-center justify-center">
+                        <svg viewBox="0 0 400 300" class="w-full h-full">
+                            <!-- N (Naturais) -->
+                            <circle cx="200" cy="150" r="40" class="set-venn" fill="rgba(99,102,241,0.3)" />
+                            <text x="200" y="155" text-anchor="middle" fill="white" font-size="16" font-weight="bold">ℕ</text>
+                            
+                            <!-- Z (Inteiros) -->
+                            <circle cx="200" cy="150" r="70" class="set-venn" fill="rgba(139,92,246,0.2)" />
+                            <text x="200" y="95" text-anchor="middle" fill="#a855f7" font-size="14">ℤ</text>
+                            
+                            <!-- Q (Racionais) -->
+                            <circle cx="200" cy="150" r="100" class="set-venn" fill="rgba(168,85,247,0.15)" />
+                            <text x="200" y="55" text-anchor="middle" fill="#c084fc" font-size="14">ℚ</text>
+                            
+                            <!-- R (Reais) -->
+                            <rect x="50" y="20" width="300" height="260" rx="20" class="set-venn" fill="rgba(192,132,252,0.1)" />
+                            <text x="330" y="40" text-anchor="middle" fill="#e879f9" font-size="14">ℝ</text>
+                            
+                            <!-- Números Irracionais -->
+                            <text x="280" y="150" text-anchor="middle" fill="#f0abfc" font-size="12">√2, π, e</text>
+                        </svg>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 mt-4 text-sm">
+                        <div class="p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                            <span class="text-blue-400 font-bold">ℕ</span> = {0, 1, 2, 3...}
+                        </div>
+                        <div class="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                            <span class="text-purple-400 font-bold">ℤ</span> = {..., -2, -1, 0, 1...}
+                        </div>
+                        <div class="p-3 rounded-lg bg-pink-500/10 border border-pink-500/20">
+                            <span class="text-pink-400 font-bold">ℚ</span> = {a/b | a,b∈ℤ, b≠0}
+                        </div>
+                        <div class="p-3 rounded-lg bg-fuchsia-500/10 border border-fuchsia-500/20">
+                            <span class="text-fuchsia-400 font-bold">ℝ</span> = ℚ ∪ 𝕀
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reta Numérica Interativa -->
+                <div class="glass-effect rounded-2xl p-6 border border-white/10">
+                    <h3 class="font-space text-xl font-bold mb-6 flex items-center gap-2">
+                        <i class="fas fa-ruler text-math-accent"></i>
+                        Reta Numérica Interativa
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div class="relative pt-8 pb-4">
+                            <div class="number-line w-full"></div>
+                            <div class="number-point" style="left: 20%" onclick="showNumberInfo('naturais')" title="Naturais"></div>
+                            <div class="number-point" style="left: 40%" onclick="showNumberInfo('inteiros')" title="Inteiros"></div>
+                            <div class="number-point" style="left: 60%" onclick="showNumberInfo('racionais')" title="Racionais"></div>
+                            <div class="number-point" style="left: 85%" onclick="showNumberInfo('irracionais')" title="Irracionais"></div>
+                            
+                            <div class="flex justify-between mt-4 text-xs text-gray-500">
+                                <span>-3</span>
+                                <span>-2</span>
+                                <span>-1</span>
+                                <span>0</span>
+                                <span>1</span>
+                                <span>2</span>
+                                <span>3</span>
+                            </div>
+                        </div>
+
+                        <div id="number-info" class="p-4 rounded-xl bg-black/30 border border-white/10 min-h-[120px]">
+                            <p class="text-gray-400 text-center italic">Clique nos pontos na reta numérica para explorar cada conjunto...</p>
+                        </div>
+
+                        <div class="grid grid-cols-4 gap-2">
+                            <button onclick="highlightSet('naturais')" class="p-2 rounded-lg bg-blue-500/20 text-blue-400 text-xs font-medium hover:bg-blue-500/30 transition-colors">ℕ Naturais</button>
+                            <button onclick="highlightSet('inteiros')" class="p-2 rounded-lg bg-purple-500/20 text-purple-400 text-xs font-medium hover:bg-purple-500/30 transition-colors">ℤ Inteiros</button>
+                            <button onclick="highlightSet('racionais')" class="p-2 rounded-lg bg-pink-500/20 text-pink-400 text-xs font-medium hover:bg-pink-500/30 transition-colors">ℚ Racionais</button>
+                            <button onclick="highlightSet('reais')" class="p-2 rounded-lg bg-fuchsia-500/20 text-fuchsia-400 text-xs font-medium hover:bg-fuchsia-500/30 transition-colors">ℝ Reais</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercícios de Conjuntos -->
+            <div class="exercise-card rounded-2xl p-8">
+                <h3 class="font-space text-2xl font-bold mb-6 flex items-center gap-3">
+                    <i class="fas fa-brain text-math-accent"></i>
+                    Exercícios Práticos: Classificação
+                </h3>
+
+                <div class="space-y-6">
+                    <div class="p-6 rounded-xl bg-black/20 border border-white/5">
+                        <p class="text-lg mb-4">Classifique os seguintes números nos conjuntos apropriados (ℕ, ℤ, ℚ, 𝕀, ℝ):</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-4 mb-6">
+                            <div class="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-white/10 hover:border-math-accent/50 transition-colors cursor-pointer" onclick="toggleAnswer(this)">
+                                <span class="font-mono text-xl">-5</span>
+                                <span class="text-sm text-gray-400">Clique para ver resposta</span>
+                                <span class="hidden answer text-math-accent font-bold">∈ ℤ, ℚ, ℝ</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-white/10 hover:border-math-accent/50 transition-colors cursor-pointer" onclick="toggleAnswer(this)">
+                                <span class="font-mono text-xl">2/3</span>
+                                <span class="text-sm text-gray-400">Clique para ver resposta</span>
+                                <span class="hidden answer text-math-accent font-bold">∈ ℚ, ℝ</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-white/10 hover:border-math-accent/50 transition-colors cursor-pointer" onclick="toggleAnswer(this)">
+                                <span class="font-mono text-xl">√2</span>
+                                <span class="text-sm text-gray-400">Clique para ver resposta</span>
+                                <span class="hidden answer text-math-accent font-bold">∈ 𝕀, ℝ</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-white/10 hover:border-math-accent/50 transition-colors cursor-pointer" onclick="toggleAnswer(this)">
+                                <span class="font-mono text-xl">0</span>
+                                <span class="text-sm text-gray-400">Clique para ver resposta</span>
+                                <span class="hidden answer text-math-accent font-bold">∈ ℕ, ℤ, ℚ, ℝ</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                            <p class="text-sm text-yellow-400"><i class="fas fa-lightbulb mr-2"></i><strong>Dica:</strong> Lembre-se: ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ. Todo número natural é inteiro, todo inteiro é racional, e todo racional é real!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Potenciação e Radiciação -->
+    <section id="potenciacao" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <span class="text-math-accent font-semibold text-sm uppercase tracking-wider">Módulo 2</span>
+                <h2 class="font-space text-4xl font-bold mt-2 mb-4">Potenciação e Radiciação</h2>
+                <p class="text-gray-400 max-w-2xl">Domine as propriedades operatórias e simplifique expressões complexas.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6 mb-12">
+                <!-- Propriedades -->
+                <div class="lg:col-span-2 glass-effect rounded-2xl p-6 border border-white/10">
+                    <h3 class="font-space text-xl font-bold mb-6">Propriedades da Potenciação</h3>
+                    
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="formula-box p-4 rounded-lg">
+                            <p class="text-math-accent font-bold mb-1">Multiplicação</p>
+                            <p class="text-lg">aᵐ × aⁿ = aᵐ⁺ⁿ</p>
+                            <p class="text-xs text-gray-400 mt-2">Ex: 2³ × 2² = 2⁵ = 32</p>
+                        </div>
+                        
+                        <div class="formula-box p-4 rounded-lg">
+                            <p class="text-math-accent font-bold mb-1">Divisão</p>
+                            <p class="text-lg">aᵐ ÷ aⁿ = aᵐ⁻ⁿ</p>
+                            <p class="text-xs text-gray-400 mt-2">Ex: 5⁴ ÷ 5² = 5² = 25</p>
+                        </div>
+                        
+                        <div class="formula-box p-4 rounded-lg">
+                            <p class="text-math-accent font-bold mb-1">Potência de Potência</p>
+                            <p class="text-lg">(aᵐ)ⁿ = aᵐˣⁿ</p>
+                            <p class="text-xs text-gray-400 mt-2">Ex: (3²)³ = 3⁶ = 729</p>
+                        </div>
+                        
+                        <div class="formula-box p-4 rounded-lg">
+                            <p class="text-math-accent font-bold mb-1">Expoente Negativo</p>
+                            <p class="text-lg">a⁻ⁿ = 1/aⁿ</p>
+                            <p class="text-xs text-gray-400 mt-2">Ex: 2⁻³ = 1/8</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 rounded-lg bg-math-accent/10 border border-math-accent/20">
+                        <h4 class="font-bold mb-2 flex items-center gap-2">
+                            <i class="fas fa-square-root-alt text-math-accent"></i>
+                            Radiciação (Potência com expoente fracionário)
+                        </h4>
+                        <p class="font-mono text-lg mb-2">ⁿ√a = a¹/ⁿ</p>
+                        <p class="text-sm text-gray-400">A raiz enésima de um número é equivalente a elevá-lo à potência 1/n.</p>
+                    </div>
+                </div>
+
+                <!-- Calculadora Interativa -->
+                <div class="glass-effect rounded-2xl p-6 border border-white/10">
+                    <h3 class="font-space text-lg font-bold mb-4">Treine as Propriedades</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Base (a)</label>
+                            <input type="number" id="base" class="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-math-accent focus:outline-none" placeholder="2" oninput="calculatePower()">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Expoente (n)</label>
+                            <input type="number" id="exponent" class="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-math-accent focus:outline-none" placeholder="3" oninput="calculatePower()">
+                        </div>
+
+                        <div class="p-4 rounded-lg bg-black/30 border border-white/10 text-center">
+                            <p class="text-sm text-gray-400 mb-1">Resultado</p>
+                            <p id="power-result" class="text-3xl font-bold text-math-accent">8</p>
+                            <p id="power-calc" class="text-xs text-gray-500 mt-1">2³ = 8</p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setExample(2, 10)" class="p-2 rounded bg-white/5 text-xs hover:bg-white/10 transition-colors">2¹⁰</button>
+                            <button onclick="setExample(3, -2)" class="p-2 rounded bg-white/5 text-xs hover:bg-white/10 transition-colors">3⁻²</button>
+                            <button onclick="setExample(16, 0.5)" class="p-2 rounded bg-white/5 text-xs hover:bg-white/10 transition-colors">√16</button>
+                            <button onclick="setExample(2, 0)" class="p-2 rounded bg-white/5 text-xs hover:bg-white/10 transition-colors">2⁰</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercícios de Potenciação -->
+            <div class="exercise-card rounded-2xl p-8">
+                <h3 class="font-space text-2xl font-bold mb-6">Exercícios de Fixação</h3>
+
+                <div class="space-y-6">
+                    <div class="p-6 rounded-xl bg-black/20 border border-white/5">
+                        <p class="font-medium mb-4 text-lg">1. Simplifique a expressão:</p>
+                        <div class="formula-box p-4 rounded-lg mb-4 text-center text-xl">
+                            (2³ × 2⁵) ÷ 2⁴
+                        </div>
+                        
+                        <div class="flex gap-2 mb-4">
+                            <button onclick="checkAnswer(this, false)" class="check-answer flex-1 p-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-all">
+                                2⁸
+                            </button>
+                            <button onclick="checkAnswer(this, true)" class="check-answer flex-1 p-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-all">
+                                2⁴
+                            </button>
+                            <button onclick="checkAnswer(this, false)" class="check-answer flex-1 p-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-all">
+                                2¹²
+                            </button>
+                        </div>
+
+                        <div class="hidden explanation p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-sm">
+                            <p><strong>Resolução:</strong> (2³ × 2⁵) = 2⁸ (multiplicação: soma expoentes). 2⁸ ÷ 2⁴ = 2⁴ (divisão: subtrai expoentes). <strong>Resposta: 16</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-xl bg-black/20 border border-white/5">
+                        <p class="font-medium mb-4 text-lg">2. Calcule o valor de:</p>
+                        <div class="formula-box p-4 rounded-lg mb-4 text-center text-xl">
+                            27⁻²/³
+                        </div>
+
+                        <div class="flex flex-col gap-2">
+                            <input type="text" id="resp2" placeholder="Digite sua resposta (ex: 1/9)" class="w-full bg-black/30 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-math-accent focus:outline-none">
+                            <button onclick="verifyResp2()" class="w-full bg-math-accent/20 border border-math-accent text-math-accent py-2 rounded-lg hover:bg-math-accent/30 transition-all">
+                                Verificar Resposta
+                            </button>
+                            <div id="feedback2" class="hidden p-3 rounded-lg text-sm"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expressões Algébricas -->
+    <section id="algebra" class="py-20 bg-math-card/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <span class="text-math-accent font-semibold text-sm uppercase tracking-wider">Módulo 3</span>
+                <h2 class="font-space text-4xl font-bold mt-2 mb-4">Expressões Algébricas</h2>
+                <p class="text-gray-400 max-w-2xl">Simplificação, produtos notáveis e fatoração.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="glass-effect rounded-2xl p-6 border border-white/10">
+                    <h3 class="font-space text-xl font-bold mb-6">Produtos Notáveis</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10">
+                            <p class="text-sm text-gray-400 mb-1">Quadrado da Soma</p>
+                            <p class="font-mono text-lg text-white">(a + b)² = a² + 2ab + b²</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-white/10">
+                            <p class="text-sm text-gray-400 mb-1">Quadrado da Diferença</p>
+                            <p class="font-mono text-lg text-white">(a - b)² = a² - 2ab + b²</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-gradient-to-r from-pink-500/10 to-orange-500/10 border border-white/10">
+                            <p class="text-sm text-gray-400 mb-1">Produto da Soma pela Diferença</p>
+                            <p class="font-mono text-lg text-white">(a + b)(a - b) = a² - b²</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                        <p class="text-sm"><i class="fas fa-exclamation-triangle text-yellow-400 mr-2"></i><strong>Atenção:</strong> (a + b)² ≠ a² + b² (erro comum!)</p>
+                    </div>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border border-white/10">
+                    <h3 class="font-space text-xl font-bold mb-6">Fatoração Comum</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg bg-black/20">
+                            <p class="text-sm text-gray-400 mb-2">Coloque em evidência:</p>
+                            <p class="font-mono text-xl mb-3">6x²y + 9xy²</p>
+                            
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="step-indicator">1</div>
+                                    <p class="text-sm">Encontre o MDC dos coeficientes: MDC(6,9) = 3</p>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="step-indicator">2</div>
+                                    <p class="text-sm">Variáveis comuns com menor expoente: xy</p>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="step-indicator">3</div>
+                                    <p class="text-sm">Resultado: <span class="text-math-accent font-mono">3xy(2x + 3y)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercício Interativo -->
+            <div class="mt-8 exercise-card rounded-2xl p-8">
+                <h3 class="font-space text-2xl font-bold mb-6">Pratique a Simplificação</h3>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="p-6 rounded-xl bg-black/20 border border-white/5">
+                        <p class="mb-4">Simplifique: <span class="font-mono text-xl text-math-accent">(x + 3)² - (x - 3)²</span></p>
+                        
+                        <div class="space-y-2" id="algebra-steps">
+                            <button onclick="revealStep(1)" class="w-full text-left p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all text-sm">
+                                <span class="text-math-accent mr-2">1.</span> Clique para expandir (x + 3)²
+                            </button>
+                            <div id="step1" class="hidden pl-8 py-2 text-gray-400 text-sm">
+                                x² + 6x + 9
+                            </div>
+                            
+                            <button onclick="revealStep(2)" class="w-full text-left p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all text-sm">
+                                <span class="text-math-accent mr-2">2.</span> Clique para expandir (x - 3)²
+                            </button>
+                            <div id="step2" class="hidden pl-8 py-2 text-gray-400 text-sm">
+                                x² - 6x + 9
+                            </div>
+                            
+                            <button onclick="revealStep(3)" class="w-full text-left p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-all text-sm">
+                                <span class="text-math-accent mr-2">3.</span> Clique para subtrair
+                            </button>
+                            <div id="step3" class="hidden pl-8 py-2 text-math-accent font-bold text-sm">
+                                (x² + 6x + 9) - (x² - 6x + 9) = 12x
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-xl bg-black/20 border border-white/5">
+                        <p class="mb-4">Fatore: <span class="font-mono text-xl text-math-accent">x² - 25</span></p>
+                        
+                        <div class="flex flex-col gap-3">
+                            <button onclick="checkFactor(this, 'soma')" class="p-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-left">
+                                (x - 5)²
+                            </button>
+                            <button onclick="checkFactor(this, 'diferenca')" class="p-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-left">
+                                (x + 5)(x - 5)
+                            </button>
+                            <button onclick="checkFactor(this, 'errado')" class="p-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-left">
+                                (x - 5)(x - 5)
+                            </button>
+                        </div>
+                        <div id="factor-feedback" class="mt-3 hidden p-3 rounded-lg text-sm"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equações e Inequações -->
+    <section id="equacoes" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <span class="text-math-accent font-semibold text-sm uppercase tracking-wider">Módulo 4</span>
+                <h2 class="font-space text-4xl font-bold mt-2 mb-4">Equações e Inequações do 1º Grau</h2>
+                <p class="text-gray-400 max-w-2xl">Resolução passo a passo e representação gráfica.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="glass-effect rounded-2xl p-6 border border-white/10">
+                    <h3 class="font-space text-xl font-bold mb-6 flex items-center gap-2">
+                        <i class="fas fa-balance-scale text-math-accent"></i>
+                        Princípio da Equivalência
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                            <p class="font-bold text-blue-400 mb-2">Adição/Subtração</p>
+                            <p class="text-sm">Adicionar ou subtrair o mesmo valor em ambos os lados mantém a igualdade.</p>
+                            <p class="font-mono mt-2 text-xs">Se a = b, então a + c = b + c</p>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                            <p class="font-bold text-purple-400 mb-2">Multiplicação/Divisão</p>
+                            <p class="text-sm">Multiplicar ou dividir ambos os lados pelo mesmo valor (≠0) mantém a igualdade.</p>
+                            <p class="font-mono mt-2 text-xs">Se a = b, então a × c = b × c</p>
+                        </div>
+
+                        <div class="p-4 rounded-lg bg-red-500/10 border border-red-500/20">
+                            <p class="font-bold text-red-400 mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Atenção nas Inequações!</p>
+                            <p class="text-sm">Ao multiplicar ou dividir por número <strong>negativo</strong>, inverta o sinal de desigualdade!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 border border-white/10">
+                    <h3 class="font-space text-xl font-bold mb-6">Resolução Guiada</h3>
+                    
+                    <div class="bg-black/30 rounded-xl p-6">
+                        <p class="text-center font-mono text-2xl mb-6 text-math-accent">3x + 7 = 22</p>
+                        
+                        <div class="space-y-3" id="equation-steps">
+                            <div class="flex items-center gap-4 opacity-50" id="eq-step1">
+                                <div class="w-8 h-8 rounded-full bg-math-accent/20 flex items-center justify-center text-math-accent text-sm font-bold">1</div>
+                                <p class="flex-1">Subtraia 7 dos dois lados</p>
+                                <button onclick="solveEquation(1)" class="px-3 py-1 rounded bg-math-accent/20 text-math-accent text-xs hover:bg-math-accent/30">Fazer</button>
+                            </div>
+                            <div class="hidden pl-12 text-gray-400 text-sm" id="eq-result1">3x = 15</div>
+
+                            <div class="flex items-center gap-4 opacity-50" id="eq-step2">
+                                <div class="w-8 h-8 rounded-full bg-math-accent/20 flex items-center justify-center text-math-accent text-sm font-bold">2</div>
+                                <p class="flex-1">Divida por 3</p>
+                                <button onclick="solveEquation(2)" class="px-3 py-1 rounded bg-math-accent/20 text-math-accent text-xs hover:bg-math-accent/30">Fazer</button>
+                            </div>
+                            <div class="hidden pl-12 text-math-accent font-bold" id="eq-result2">x = 5</div>
+
+                            <div class="hidden mt-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20" id="eq-verification">
+                                <p class="text-sm text-green-400"><i class="fas fa-check-circle mr-2"></i>Verificação: 3(5) + 7 = 15 + 7 = 22 ✓</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sistemas Lineares -->
+            <div class="mt-12 exercise-card rounded-2xl p-8">
+                <h3 class="font-space text-2xl font-bold mb-6">Sistemas Lineares 2×2</h3>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-bold mb-4 text-math-accent">Método da Substituição</h4>
+                        
+                        <div class="bg-black/20 rounded-lg p-4 mb-4 font-mono text-sm">
+                            <p>{ x + y = 10</p>
+                            <p>{ x - y = 2</p>
+                        </div>
+
+                        <div class="space-y-3 text-sm">
+                            <div class="flex gap-3">
+                                <span class="text-math-accent font-bold">1.</span>
+                                <p>Isolamos x na 2ª equação: <span class="font-mono text-math-accent">x = y + 2</span></p>
+                            </div>
+                            <div class="flex gap-3">
+                                <span class="text-math-accent font-bold">2.</span>
+                                <p>Substituímos na 1ª: <span class="font-mono">(y + 2) + y = 10</span></p>
+                            </div>
+                            <div class="flex gap-3">
+                                <span class="text-math-accent font-bold">3.</span>
+                                <p>Resolvendo: <span class="font-mono">2y = 8 → y = 4</span></p>
+                            </div>
+                            <div class="flex gap-3">
+                                <span class="text-math-accent font-bold">4.</span>
+                                <p>Voltamos: <span class="font-mono text-math-accent">x = 4 + 2 = 6</span></p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                            <p class="text-green-400 font-bold">S = {(6, 4)}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold mb-4 text-math-accent">Método da Adição</h4>
+                        
+                        <div class="bg-black/20 rounded-lg p-4 mb-4 font-mono text-sm">
+                            <p>{ 2x + 3y = 13</p>
+                            <p>{ 2x - y = 5</p>
+                        </div>
+
+                        <div class="space-y-3 text-sm">
+                            <div class="flex gap-3">
+                                <span class="text-math-accent font-bold">1.</span>
+                                <p>Subtraímos as equações (elimina x):</p>
+                            </div>
+                            <div class="pl-6 font-mono text-math-accent">
+                                4y = 8 → y = 2
+                            </div>
+                            <div class="flex gap-3">
+                                <span class="text-math-accent font-bold">2.</span>
+                                <p>Substituímos y na 1ª equação:</p>
+                            </div>
+                            <div class="pl-6 font-mono">
+                                2x + 3(2) = 13<br>
+                                2x = 7 → x = 3,5
+                            </div>
+                        </div>
+
+                        <div class="mt-4 p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                            <p class="text-green-400 font-bold">S = {(3,5; 2)}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exercício de Sistema -->
+                <div class="mt-8 p-6 rounded-xl bg-black/20 border border-white/5">
+                    <p class="font-medium mb-4">Resolva o sistema:</p>
+                    <div class="font-mono text-lg mb-6 text-center">
+                        <p>{ 3x + 2y = 12</p>
+                        <p>{ x - y = 1</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <button onclick="checkSystem(this, '2,3')" class="p-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-center">
+                            x=2, y=3
+                        </button>
+                        <button onclick="checkSystem(this, '3,2')" class="p-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-center">
+                            x=3, y=2
+                        </button>
+                        <button onclick="checkSystem(this, '4,1')" class="p-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-center">
+                            x=4, y=1
+                        </button>
+                        <button onclick="checkSystem(this, '1,4')" class="p-3 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-center">
+                            x=1, y=4
+                        </button>
+                    </div>
+                    <div id="system-feedback" class="mt-3 hidden p-3 rounded-lg text-sm"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Técnicas Cognitivas -->
+    <section id="tecnicas" class="py-20 bg-math-card/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-space text-4xl font-bold mb-4">Técnicas <span class="text-gradient">Cognitivas</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Estratégias para potencializar seu aprendizado e memorização</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <!-- Mapas Mentais -->
+                <div class="technique-card rounded-2xl p-8">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-2xl">
+                            <i class="fas fa-brain text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-space text-2xl font-bold">Mapas Mentais</h3>
+                            <p class="text-sm text-gray-400">Organização visual do conhecimento</p>
+                        </div>
+                    </div>
+
+                    <div class="relative h-64 mb-6">
+                        <svg viewBox="0 0 400 250" class="w-full h-full">
+                            <!-- Nó central -->
+                            <circle cx="200" cy="125" r="40" fill="rgba(99,102,241,0.3)" stroke="#6366f1" stroke-width="2"/>
+                            <text x="200" y="130" text-anchor="middle" fill="white" font-size="12" font-weight="bold">NÚMEROS</text>
+                            
+                            <!-- Ramos -->
+                            <line x1="160" y1="125" x2="80" y2="60" stroke="#6366f1" stroke-width="2"/>
+                            <line x1="160" y1="125" x2="60" y2="125" stroke="#8b5cf6" stroke-width="2"/>
+                            <line x1="160" y1="125" x2="80" y2="190" stroke="#a855f7" stroke-width="2"/>
+                            
+                            <line x1="240" y1="125" x2="320" y2="60" stroke="#6366f1" stroke-width="2"/>
+                            <line x1="240" y1="125" x2="340" y2="125" stroke="#8b5cf6" stroke-width="2"/>
+                            <line x1="240" y1="125" x2="320" y2="190" stroke="#a855f7" stroke-width="2"/>
+                            
+                            <!-- Nós filhos -->
+                            <rect x="40" y="40" width="60" height="30" rx="5" fill="rgba(99,102,241,0.2)" stroke="#6366f1"/>
+                            <text x="70" y="60" text-anchor="middle" fill="white" font-size="10">ℕ Naturais</text>
+                            
+                            <rect x="20" y="110" width="60" height="30" rx="5" fill="rgba(139,92,246,0.2)" stroke="#8b5cf6"/>
+                            <text x="50" y="130" text-anchor="middle" fill="white" font-size="10">ℤ Inteiros</text>
+                            
+                            <rect x="40" y="180" width="60" height="30" rx="5" fill="rgba(168,85,247,0.2)" stroke="#a855f7"/>
+                            <text x="70" y="200" text-anchor="middle" fill="white" font-size="10">ℚ Racionais</text>
+                            
+                            <rect x="280" y="40" width="60" height="30" rx="5" fill="rgba(99,102,241,0.2)" stroke="#6366f1"/>
+                            <text x="310" y="60" text-anchor="middle" fill="white" font-size="10">Operações</text>
+                            
+                            <rect x="310" y="110" width="60" height="30" rx="5" fill="rgba(139,92,246,0.2)" stroke="#8b5cf6"/>
+                            <text x="340" y="130" text-anchor="middle" fill="white" font-size="10">Propriedades</text>
+                            
+                            <rect x="280" y="180" width="60" height="30" rx="5" fill="rgba(168,85,247,0.2)" stroke="#a855f7"/>
+                            <text x="310" y="200" text-anchor="middle" fill="white" font-size="10">Aplicações</text>
+                        </svg>
+                    </div>
+
+                    <ul class="space-y-3 text-sm text-gray-300">
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-check text-math-accent mt-1"></i>
+                            <span>Use cores diferentes para cada ramo principal</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-check text-math-accent mt-1"></i>
+                            <span>Coloque imagens e símbolos matemáticos</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fas fa-check text-math-accent mt-1"></i>
+                            <span>Conecte conceitos relacionados com setas</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Esquemas e Fluxogramas -->
+                <div class="technique-card rounded-2xl p-8">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-2xl">
+                            <i class="fas fa-project-diagram text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-space text-2xl font-bold">Esquemas e Fluxogramas</h3>
+                            <p class="text-sm text-gray-400">Passo a passo visual</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 mb-6">
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5">
+                            <div class="w-8 h-8 rounded bg-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-sm">1</div>
+                            <p class="text-sm">Identifique o tipo de equação</p>
+                        </div>
+                        <div class="flex justify-center"><i class="fas fa-arrow-down text-gray-500"></i></div>
+                        
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5">
+                            <div class="w-8 h-8 rounded bg-purple-500/20 flex items-center justify-center text-purple-400 font-bold text-sm">2</div>
+                            <p class="text-sm">Isolar a variável (princípio da equivalência)</p>
+                        </div>
+                        <div class="flex justify-center"><i class="fas fa-arrow-down text-gray-500"></i></div>
+                        
+                        <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5">
+                            <div class="w-8 h-8 rounded bg-pink-500/20 flex items-center justify-center text-pink-400 font-bold text-sm">3</div>
+                            <p class="text-sm">Verificar a solução (prova real)</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                        <p class="text-sm text-yellow-400"><i class="fas fa-lightbulb mr-2"></i><strong>Dica:</strong> Crie fluxogramas para cada tipo de problema. Isso ajuda o cérebro a reconhecer padrões!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Revisão Espaçada -->
+            <div class="glass-effect rounded-2xl p-8 border border-white/10">
+                <h3 class="font-space text-2xl font-bold mb-6 text-center">Plano de Revisão Espaçada (Método Ebbinghaus)</h3>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-3 px-4 text-math-accent">Conteúdo</th>
+                                <th class="text-center py-3 px-4">1ª Revisão<br><span class="text-xs text-gray-500">24h depois</span></th>
+                                <th class="text-center py-3 px-4">2ª Revisão<br><span class="text-xs text-gray-500">3 dias depois</span></th>
+                                <th class="text-center py-3 px-4">3ª Revisão<br><span class="text-xs text-gray-500">1 semana</span></th>
+                                <th class="text-center py-3 px-4">4ª Revisão<br><span class="text-xs text-gray-500">1 mês</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                <td class="py-3 px-4 font-medium">Conjuntos Numéricos</td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                            </tr>
+                            <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                <td class="py-3 px-4 font-medium">Potenciação</td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                            </tr>
+                            <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                                <td class="py-3 px-4 font-medium">Expressões Algébricas</td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="py-3 px-4 font-medium">Equações e Sistemas</td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                                <td class="text-center"><input type="checkbox" class="w-5 h-5 rounded border-gray-600 text-math-accent focus:ring-math-accent bg-black/30"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-6 grid md:grid-cols-3 gap-4">
+                    <div class="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 text-center">
+                        <i class="fas fa-brain text-2xl text-blue-400 mb-2"></i>
+                        <p class="text-sm font-medium">Memória de Longo Prazo</p>
+                        <p class="text-xs text-gray-400 mt-1">Revisões espaçadas consolidam o conhecimento</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-purple-500/10 border border-purple-500/20 text-center">
+                        <i class="fas fa-chart-line text-2xl text-purple-400 mb-2"></i>
+                        <p class="text-sm font-medium">Retenção Ativa</p>
+                        <p class="text-xs text-gray-400 mt-1">Teste-se ao invés de apenas reler</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-pink-500/10 border border-pink-500/20 text-center">
+                        <i class="fas fa-puzzle-piece text-2xl text-pink-400 mb-2"></i>
+                        <p class="text-sm font-medium">Intercalação</p>
+                        <p class="text-xs text-gray-400 mt-1">Alterne entre diferentes tipos de problemas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black/40 border-t border-white/10 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <svg viewBox="0 0 100 100" class="w-10 h-10 text-math-accent">
+                        <polygon points="50,5 95,95 5,95" fill="none" stroke="currentColor" stroke-width="3"/>
+                        <text x="50" y="75" text-anchor="middle" fill="currentColor" font-size="40" font-family="Space Grotesk" font-weight="bold">1</text>
+                    </svg>
+                    <div>
+                        <h3 class="font-space text-xl font-bold">Triângulo Potência</h3>
+                        <p class="text-sm text-gray-400">1º Ano do Ensino Médio</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-6 text-sm text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Próximo: 2º Ano →</a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-white/10 text-center text-sm text-gray-500">
+                <p>© 2026 Triângulo Potência. Prof. Fabrício Alves. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-lg', 'bg-math-dark/95');
+            } else {
+                nav.classList.remove('shadow-lg', 'bg-math-dark/95');
+            }
+        });
+
+        // Number Line Interaction
+        function showNumberInfo(set) {
+            const info = document.getElementById('number-info');
+            const data = {
+                'naturais': {
+                    title: 'Números Naturais (ℕ)',
+                    content: 'ℕ = {0, 1, 2, 3, 4, ...}<br><br>Usados para contar. Incluem o zero e todos os inteiros positivos.',
+                    color: 'blue'
+                },
+                'inteiros': {
+                    title: 'Números Inteiros (ℤ)',
+                    content: 'ℤ = {..., -3, -2, -1, 0, 1, 2, 3, ...}<br><br>Incluem os naturais e seus opostos negativos. Usados para representar saldos, temperaturas negativas, etc.',
+                    color: 'purple'
+                },
+                'racionais': {
+                    title: 'Números Racionais (ℚ)',
+                    content: 'ℚ = {a/b | a,b ∈ ℤ, b≠0}<br><br>Podem ser escritos como fração. Incluem inteiros, frações e decimais finitos ou periódicos.',
+                    color: 'pink'
+                },
+                'irracionais': {
+                    title: 'Números Irracionais (𝕀)',
+                    content: '𝕀 = {√2, √3, π, e, ...}<br><br>Não podem ser escritos como fração. Decimais infinitos não periódicos.',
+                    color: 'fuchsia'
+                }
+            };
+            
+            const item = data[set];
+            info.innerHTML = `
+                <h4 class="font-bold text-${item.color}-400 mb-2">${item.title}</h4>
+                <p class="text-sm text-gray-300">${item.content}</p>
+            `;
+            info.classList.add('animate-pulse');
+            setTimeout(() => info.classList.remove('animate-pulse'), 500);
+        }
+
+        // Toggle Answers
+        function toggleAnswer(element) {
+            const answer = element.querySelector('.answer');
+            const hint = element.querySelector('span:nth-child(2)');
+            
+            if (answer.classList.contains('hidden')) {
+                answer.classList.remove('hidden');
+                hint.classList.add('hidden');
+                element.classList.add('border-math-accent');
+            }
+        }
+
+        // Power Calculator
+        function calculatePower() {
+            const base = parseFloat(document.getElementById('base').value) || 2;
+            const exp = parseFloat(document.getElementById('exponent').value) || 3;
+            const result = Math.pow(base, exp);
+            
+            document.getElementById('power-result').textContent = 
+                Number.isInteger(result) ? result : result.toFixed(4);
+            document.getElementById('power-calc').textContent = 
+                `${base}^${exp} = ${Number.isInteger(result) ? result : result.toFixed(4)}`;
+        }
+
+        function setExample(base, exp) {
+            document.getElementById('base').value = base;
+            document.getElementById('exponent').value = exp;
+            calculatePower();
+        }
+
+        // Check Answers
+        function checkAnswer(btn, isCorrect) {
+            const parent = btn.parentElement;
+            const explanation = parent.nextElementSibling;
+            
+            // Reset all buttons
+            parent.querySelectorAll('button').forEach(b => {
+                b.classList.remove('correct', 'wrong');
+                b.disabled = true;
+            });
+            
+            if (isCorrect) {
+                btn.classList.add('correct');
+                explanation.classList.remove('hidden');
+                explanation.classList.add('block');
+            } else {
+                btn.classList.add('wrong');
+                setTimeout(() => {
+                    parent.querySelectorAll('button').forEach(b => b.disabled = false);
+                    btn.classList.remove('wrong');
+                }, 1000);
+            }
+        }
+
+        function verifyResp2() {
+            const input = document.getElementById('resp2').value.toLowerCase().replace(/\s/g, '');
+            const feedback = document.getElementById('feedback2');
+            
+            if (input === '1/9' || input === '0.111' || input === '0,111') {
+                feedback.className = 'mt-3 p-3 rounded-lg text-sm bg-green-500/10 border border-green-500/20 text-green-400';
+                feedback.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Correto! 27^(-2/3) = (³√27)^(-2) = 3^(-2) = 1/9';
+            } else {
+                feedback.className = 'mt-3 p-3 rounded-lg text-sm bg-red-500/10 border border-red-500/20 text-red-400';
+                feedback.innerHTML = '<i class="fas fa-times-circle mr-2"></i>Tente novamente. Lembre-se: a^(-n) = 1/(a^n) e 27 = 3³';
+            }
+            feedback.classList.remove('hidden');
+        }
+
+        // Algebra Steps
+        function revealStep(step) {
+            const el = document.getElementById(`step${step}`);
+            el.classList.remove('hidden');
+            el.classList.add('animate-pulse');
+            setTimeout(() => el.classList.remove('animate-pulse'), 500);
+        }
+
+        function checkFactor(btn, type) {
+            const feedback = document.getElementById('factor-feedback');
+            const allBtns = btn.parentElement.querySelectorAll('button');
+            
+            allBtns.forEach(b => b.disabled = true);
+            
+            if (type === 'diferenca') {
+                btn.classList.add('correct');
+                feedback.className = 'mt-3 p-3 rounded-lg text-sm bg-green-500/10 border border-green-500/20 text-green-400 block';
+                feedback.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Correto! x² - 25 é diferença de quadrados: (x+5)(x-5)';
+            } else {
+                btn.classList.add('wrong');
+                feedback.className = 'mt-3 p-3 rounded-lg text-sm bg-red-500/10 border border-red-500/20 text-red-400 block';
+                feedback.innerHTML = '<i class="fas fa-times-circle mr-2"></i>Incorreto. Lembre-se: a² - b² = (a+b)(a-b)';
+                setTimeout(() => {
+                    allBtns.forEach(b => {
+                        b.disabled = false;
+                        b.classList.remove('wrong');
+                    });
+                }, 2000);
+            }
+        }
+
+        // Equation Solver
+        function solveEquation(step) {
+            if (step === 1) {
+                document.getElementById('eq-step1').classList.remove('opacity-50');
+                document.getElementById('eq-result1').classList.remove('hidden');
+                document.getElementById('eq-step2').classList.remove('opacity-50');
+            } else if (step === 2) {
+                document.getElementById('eq-step2').classList.remove('opacity-50');
+                document.getElementById('eq-result2').classList.remove('hidden');
+                document.getElementById('eq-verification').classList.remove('hidden');
+            }
+        }
+
+        // System Check
+        function checkSystem(btn, answer) {
+            const feedback = document.getElementById('system-feedback');
+            const allBtns = btn.parentElement.querySelectorAll('button');
+            
+            allBtns.forEach(b => b.disabled = true);
+            
+            if (answer === '2,3') {
+                btn.classList.add('correct');
+                feedback.className = 'mt-3 p-3 rounded-lg text-sm bg-green-500/10 border border-green-500/20 text-green-400 block';
+                feedback.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Correto! x=2 e y=3 satisfazem ambas as equações.';
+            } else {
+                btn.classList.add('wrong');
+                feedback.className = 'mt-3 p-3 rounded-lg text-sm bg-red-500/10 border border-red-500/20 text-red-400 block';
+                feedback.innerHTML = '<i class="fas fa-times-circle mr-2"></i>Teste na 1ª equação: 3x + 2y = 12. Sua resposta dá ' + 
+                    (answer === '3,2' ? '13' : answer === '4,1' ? '14' : '11') + ' ≠ 12';
+                setTimeout(() => {
+                    allBtns.forEach(b => {
+                        b.disabled = false;
+                        b.classList.remove('wrong');
+                    });
+                }, 3000);
+            }
+        }
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+        
+        gsap.utils.toArray('.exercise-card, .technique-card, .glass-effect').forEach((element, i) => {
+            gsap.from(element, {
+                scrollTrigger: {
+                    trigger: element,
+                    start: 'top 85%',
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                delay: i * 0.1,
+                ease: 'power3.out'
+            });
+        });
+
+        // Initialize
+        calculatePower();
+    </script>
+</body>
+</html>
