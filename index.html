@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triângulo Potência | Curso de Matemática</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'space': ['Space Grotesk', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'math-dark': '#0a0a0f',
+                        'math-card': '#12121a',
+                        'math-accent': '#6366f1',
+                        'math-secondary': '#8b5cf6',
+                        'math-glow': '#a855f7',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'gradient': 'gradient 15s ease infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        gradient: {
+                            '0%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                            '100%': { backgroundPosition: '0% 50%' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0f;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        .glass-effect {
+            background: rgba(18, 18, 26, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3), 0 0 40px rgba(139, 92, 246, 0.2);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+        
+        .menu-item {
+            position: relative;
+        }
+        
+        .menu-item::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            transition: width 0.3s ease;
+        }
+        
+        .menu-item:hover::after {
+            width: 100%;
+        }
+        
+        .geometric-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(30deg, #6366f1 12%, transparent 12.5%, transparent 87%, #6366f1 87.5%, #6366f1),
+                linear-gradient(150deg, #6366f1 12%, transparent 12.5%, transparent 87%, #6366f1 87.5%, #6366f1),
+                linear-gradient(30deg, #6366f1 12%, transparent 12.5%, transparent 87%, #6366f1 87.5%, #6366f1),
+                linear-gradient(150deg, #6366f1 12%, transparent 12.5%, transparent 87%, #6366f1 87.5%, #6366f1),
+                linear-gradient(60deg, #8b5cf677 25%, transparent 25.5%, transparent 75%, #8b5cf677 75%, #8b5cf677),
+                linear-gradient(60deg, #8b5cf677 25%, transparent 25.5%, transparent 75%, #8b5cf677 75%, #8b5cf677);
+            background-size: 80px 140px;
+            background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+        }
+        
+        .triangle-decoration {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 86px solid rgba(99, 102, 241, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .video-card {
+            background: linear-gradient(145deg, #12121a 0%, #1a1a2e 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        
+        .method-card {
+            background: rgba(18, 18, 26, 0.6);
+            border-left: 4px solid #6366f1;
+        }
+        
+        .year-badge {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        }
+        
+        .content-tree {
+            position: relative;
+        }
+        
+        .content-tree::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #6366f1, #8b5cf6, transparent);
+        }
+        
+        .topic-item {
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .topic-item::before {
+            content: '';
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: #6366f1;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #6366f1;
+        }
+        
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="font-inter antialiased">
+
+    <!-- Background Elements -->
+    <div class="geometric-bg"></div>
+    <div class="triangle-decoration top-20 left-10" style="animation-delay: 0s;"></div>
+    <div class="triangle-decoration top-40 right-20" style="animation-delay: 2s;"></div>
+    <div class="triangle-decoration bottom-40 left-1/4" style="animation-delay: 4s;"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-effect border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="relative w-10 h-10 flex items-center justify-center">
+                        <svg viewBox="0 0 100 100" class="w-full h-full text-math-accent">
+                            <polygon points="50,5 95,95 5,95" fill="none" stroke="currentColor" stroke-width="3"/>
+                            <text x="50" y="75" text-anchor="middle" fill="currentColor" font-size="40" font-family="Space Grotesk" font-weight="bold">P</text>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="font-space text-2xl font-bold text-white tracking-tight">Triângulo<span class="text-math-accent">Potência</span></h1>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest">Matemática | BNCC</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="#home" class="menu-item text-gray-300 hover:text-white transition-colors font-medium">Início</a>
+                    
+                    <!-- Dropdown Menu -->
+                    <div class="dropdown relative">
+                        <button class="menu-item text-gray-300 hover:text-white transition-colors font-medium flex items-center gap-2">
+                            Conteúdos <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <div class="dropdown-menu absolute top-full left-0 mt-2 w-64 glass-effect rounded-xl shadow-2xl border border-white/10 overflow-hidden">
+                            <div class="p-2">
+                                <a href="#primeiro" class="block px-4 py-3 rounded-lg hover:bg-white/5 text-gray-300 hover:text-white transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <span class="year-badge text-xs px-2 py-1 rounded text-white font-bold">1º</span>
+                                        <span class="text-sm">Ensino Médio</span>
+                                    </div>
+                                </a>
+                                <a href="#segundo" class="block px-4 py-3 rounded-lg hover:bg-white/5 text-gray-300 hover:text-white transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <span class="year-badge text-xs px-2 py-1 rounded text-white font-bold">2º</span>
+                                        <span class="text-sm">Ensino Médio</span>
+                                    </div>
+                                </a>
+                                <a href="#terceiro" class="block px-4 py-3 rounded-lg hover:bg-white/5 text-gray-300 hover:text-white transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <span class="year-badge text-xs px-2 py-1 rounded text-white font-bold">3º</span>
+                                        <span class="text-sm">Ensino Médio</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="#metodos" class="menu-item text-gray-300 hover:text-white transition-colors font-medium">Métodos</a>
+                    <a href="#videos" class="menu-item text-gray-300 hover:text-white transition-colors font-medium">Aulas</a>
+                    <a href="#vantagens" class="menu-item text-gray-300 hover:text-white transition-colors font-medium">Vantagens</a>
+                    
+                    <button class="bg-gradient-to-r from-math-accent to-math-secondary text-white px-6 py-2.5 rounded-full font-medium hover:shadow-lg hover:shadow-math-accent/30 transition-all transform hover:scale-105">
+                        Matricule-se
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="lg:hidden text-white text-2xl" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden lg:hidden glass-effect border-t border-white/10">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#home" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg">Início</a>
+                <a href="#primeiro" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg">1º Ano</a>
+                <a href="#segundo" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg">2º Ano</a>
+                <a href="#terceiro" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg">3º Ano</a>
+                <a href="#metodos" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg">Métodos</a>
+                <a href="#videos" class="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg">Aulas</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-math-accent/10 border border-math-accent/20 text-math-accent text-sm font-medium">
+                        <span class="w-2 h-2 rounded-full bg-math-accent animate-pulse"></span>
+                        Curso alinhado à BNCC
+                    </div>
+                    
+                    <h1 class="font-space text-5xl lg:text-7xl font-bold leading-tight">
+                        Domine a <span class="text-gradient">Matemática</span> com Potência
+                    </h1>
+                    
+                    <p class="text-xl text-gray-400 leading-relaxed max-w-lg">
+                        Métodos inovadores de aprendizagem ativa, baseada em problemas reais e prática espaçada. Prepare-se para o ENEM e vestibulares com o Prof. Fabrício Alves.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-4">
+                        <button class="bg-gradient-to-r from-math-accent to-math-secondary text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-lg hover:shadow-math-accent/40 transition-all transform hover:scale-105 flex items-center gap-2">
+                            Começar Agora <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button class="px-8 py-4 rounded-full font-semibold text-lg border border-white/20 hover:bg-white/5 transition-all flex items-center gap-2">
+                            <i class="fas fa-play-circle"></i> Ver Aula Grátis
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-6 pt-4">
+                        <div class="flex -space-x-3">
+                            <img src="https://i.pravatar.cc/150?img=1" class="w-10 h-10 rounded-full border-2 border-math-dark" alt="Aluno">
+                            <img src="https://i.pravatar.cc/150?img=2" class="w-10 h-10 rounded-full border-2 border-math-dark" alt="Aluno">
+                            <img src="https://i.pravatar.cc/150?img=3" class="w-10 h-10 rounded-full border-2 border-math-dark" alt="Aluno">
+                            <div class="w-10 h-10 rounded-full border-2 border-math-dark bg-math-accent flex items-center justify-center text-xs font-bold">+2k</div>
+                        </div>
+                        <p class="text-sm text-gray-400">Alunos aprovados<br>nos melhores vestibulares</p>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-math-accent to-math-secondary rounded-3xl blur-3xl opacity-20 animate-pulse-slow"></div>
+                    <div class="relative glass-effect rounded-3xl p-2 neon-glow">
+                        <div class="bg-math-card rounded-2xl overflow-hidden">
+                            <div class="aspect-video bg-gradient-to-br from-math-accent/20 to-math-secondary/20 flex items-center justify-center relative group cursor-pointer">
+                                <div class="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors"></div>
+                                <div class="w-20 h-20 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-play text-3xl text-white ml-1"></i>
+                                </div>
+                                <div class="absolute bottom-4 left-4 right-4">
+                                    <p class="text-white font-semibold">Aula Introdução às Funções</p>
+                                    <p class="text-gray-300 text-sm">Prof. Fabrício Alves • 45 min</p>
+                                </div>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-400">Progresso do Curso</span>
+                                    <span class="text-sm font-bold text-math-accent">0%</span>
+                                </div>
+                                <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                    <div class="h-full w-0 bg-gradient-to-r from-math-accent to-math-secondary rounded-full"></div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-4 text-center">
+                                    <div class="p-3 rounded-lg bg-white/5">
+                                        <p class="text-2xl font-bold text-white">150+</p>
+                                        <p class="text-xs text-gray-400">Aulas</p>
+                                    </div>
+                                    <div class="p-3 rounded-lg bg-white/5">
+                                        <p class="text-2xl font-bold text-white">3</p>
+                                        <p class="text-xs text-gray-400">Anos</p>
+                                    </div>
+                                    <div class="p-3 rounded-lg bg-white/5">
+                                        <p class="text-2xl font-bold text-white">12</p>
+                                        <p class="text-xs text-gray-400">Módulos</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Navigation Table -->
+    <section class="py-20 bg-math-card/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="font-space text-4xl font-bold mb-4">Grade Curricular <span class="text-gradient">Completa</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Conteúdo estruturado conforme a Base Nacional Comum Curricular (BNCC) para o Ensino Médio</p>
+            </div>
+
+            <!-- Year Tabs -->
+            <div class="flex justify-center mb-12">
+                <div class="inline-flex p-1 rounded-full bg-black/30 border border-white/10">
+                    <button onclick="showYear('primeiro')" id="tab-primeiro" class="px-6 py-2 rounded-full text-sm font-medium transition-all bg-math-accent text-white">1º Ano</button>
+                    <button onclick="showYear('segundo')" id="tab-segundo" class="px-6 py-2 rounded-full text-sm font-medium transition-all text-gray-400 hover:text-white">2º Ano</button>
+                    <button onclick="showYear('terceiro')" id="tab-terceiro" class="px-6 py-2 rounded-full text-sm font-medium transition-all text-gray-400 hover:text-white">3º Ano</button>
+                </div>
+            </div>
+
+            <!-- 1st Year Content -->
+            <div id="content-primeiro" class="year-content grid md:grid-cols-2 gap-6">
+                <div class="glass-effect rounded-2xl p-6 hover-lift border border-white/5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 text-xl">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h3 class="font-space text-xl font-bold">Números e Álgebra</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Conjuntos numéricos (N, Z, Q, R)</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Potenciação e radiciação</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Expressões algébricas e simplificação</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Equações e inequações do 1º grau</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Sistemas lineares 2x2</li>
+                    </ul>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 hover-lift border border-white/5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 text-xl">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="font-space text-xl font-bold">Funções</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Introdução: conceito e representação</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Funções do 1º grau (linear)</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Funções do 2º grau: gráficos</li>
+                    </ul>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 hover-lift border border-white/5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-green-400 text-xl">
+                            <i class="fas fa-shapes"></i>
+                        </div>
+                        <h3 class="font-space text-xl font-bold">Geometria</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Geometria plana: polígonos, perímetro e área</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Teorema de Pitágoras</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Semelhança de triângulos</li>
+                    </ul>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 hover-lift border border-white/5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 text-xl">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <h3 class="font-space text-xl font-bold">Estatística e Probabilidade</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Leitura e interpretação de gráficos</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Média, mediana e moda</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 2nd Year Content (Hidden by default) -->
+            <div id="content-segundo" class="year-content hidden grid md:grid-cols-2 gap-6">
+                <div class="glass-effect rounded-2xl p-6 hover-lift border border-white/5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 text-xl">
+                            <i class="fas fa-superscript"></i>
+                        </div>
+                        <h3 class="font-space text-xl font-bold">Números e Álgebra</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Equações e inequações do 2º grau</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Sistemas lineares 3x3</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Polinômios: operações e fatoração</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Progressões aritméticas e geométricas (PA e PG)</li>
+                    </ul>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 hover-lift border border-white/5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 text-xl">
+                            <i class="fas fa-wave-square"></i>
+                        </div>
+                        <h3 class="font-space text-xl font-bold">Funções</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Funções exponenciais e logarítmicas</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Função modular</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Função quadrática avançada</li>
+                    </ul>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 hover-lift border border-white/5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-green-400 text-xl">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <h3 class="font-space text-xl font-bold">Geometria</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Geometria espacial: prismas, pirâmides, cilindros, cones e esferas</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Cálculo de volume e área lateral</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Trigonometria básica: seno, cosseno e tangente</li>
+                    </ul>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 hover-lift border border-white/5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 text-xl">
+                            <i class="fas fa-dice"></i>
+                        </div>
+                        <h3 class="font-space text-xl font-bold">Estatística e Probabilidade</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Probabilidade simples</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Experimentos e eventos</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Representações gráficas de distribuições</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 3rd Year Content (Hidden by default) -->
+            <div id="content-terceiro" class="year-content hidden grid md:grid-cols-2 gap-6">
+                <div class="glass-effect rounded-2xl p-6 hover-lift border border-white/5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 text-xl">
+                            <i class="fas fa-function"></i>
+                        </div>
+                        <h3 class="font-space text-xl font-bold">Álgebra e Funções</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Função exponencial e logarítmica avançada</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Função trigonométrica: sen, cos, tg</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Sistemas não lineares</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Matrizes e determinantes</li>
+                    </ul>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 hover-lift border border-white/5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-green-500/20 flex items-center justify-center text-green-400 text-xl">
+                            <i class="fas fa-vector-square"></i>
+                        </div>
+                        <h3 class="font-space text-xl font-bold">Geometria</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Geometria analítica: reta, circunferência, cônicas</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Vetores no plano e no espaço</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Aplicações de trigonometria</li>
+                    </ul>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 hover-lift border border-white/5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400 text-xl">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3 class="font-space text-xl font-bold">Probabilidade e Estatística</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Probabilidade composta</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Distribuições de frequência avançadas</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Correlação e regressão simples</li>
+                    </ul>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 hover-lift border border-white/5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center text-yellow-400 text-xl">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <h3 class="font-space text-xl font-bold">Matemática Financeira</h3>
+                    </div>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Juros simples e compostos</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Descontos, inflação e aplicações</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-math-accent mt-1"></i> Análise de tabelas e planilhas financeiras</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Classes Section -->
+    <section id="videos" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+                <div>
+                    <h2 class="font-space text-4xl font-bold mb-2">Aulas com <span class="text-gradient">Prof. Fabrício Alves</span></h2>
+                    <p class="text-gray-400">Videoaulas completas e exercícios resolvidos</p>
+                </div>
+                <button class="text-math-accent hover:text-white transition-colors flex items-center gap-2 font-medium">
+                    Ver todas as aulas <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Video Card 1 -->
+                <div class="video-card rounded-2xl overflow-hidden hover-lift group cursor-pointer">
+                    <div class="aspect-video bg-gradient-to-br from-blue-600/30 to-purple-600/30 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-play text-white text-xl ml-1"></i>
+                            </div>
+                        </div>
+                        <span class="absolute bottom-2 right-2 bg-black/60 px-2 py-1 rounded text-xs text-white">45:20</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-medium text-math-accent bg-math-accent/10 px-2 py-1 rounded">1º Ano</span>
+                            <span class="text-xs text-gray-500">Funções</span>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-2 group-hover:text-math-accent transition-colors">Introdução às Funções do 1º Grau</h3>
+                        <p class="text-sm text-gray-400">Conceitos fundamentais, representação gráfica e aplicações práticas.</p>
+                    </div>
+                </div>
+
+                <!-- Video Card 2 -->
+                <div class="video-card rounded-2xl overflow-hidden hover-lift group cursor-pointer">
+                    <div class="aspect-video bg-gradient-to-br from-green-600/30 to-teal-600/30 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-play text-white text-xl ml-1"></i>
+                            </div>
+                        </div>
+                        <span class="absolute bottom-2 right-2 bg-black/60 px-2 py-1 rounded text-xs text-white">52:15</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-medium text-math-accent bg-math-accent/10 px-2 py-1 rounded">2º Ano</span>
+                            <span class="text-xs text-gray-500">Geometria</span>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-2 group-hover:text-math-accent transition-colors">Geometria Espacial: Cilindros</h3>
+                        <p class="text-sm text-gray-400">Cálculo de volume, área lateral e exercícios de vestibular.</p>
+                    </div>
+                </div>
+
+                <!-- Video Card 3 -->
+                <div class="video-card rounded-2xl overflow-hidden hover-lift group cursor-pointer">
+                    <div class="aspect-video bg-gradient-to-br from-orange-600/30 to-red-600/30 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-play text-white text-xl ml-1"></i>
+                            </div>
+                        </div>
+                        <span class="absolute bottom-2 right-2 bg-black/60 px-2 py-1 rounded text-xs text-white">38:45</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-medium text-math-accent bg-math-accent/10 px-2 py-1 rounded">3º Ano</span>
+                            <span class="text-xs text-gray-500">Matemática Financeira</span>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-2 group-hover:text-math-accent transition-colors">Juros Compostos na Prática</h3>
+                        <p class="text-sm text-gray-400">Aplicações reais, planilhas e cálculos financeiros do dia a dia.</p>
+                    </div>
+                </div>
+
+                <!-- Video Card 4 -->
+                <div class="video-card rounded-2xl overflow-hidden hover-lift group cursor-pointer">
+                    <div class="aspect-video bg-gradient-to-br from-purple-600/30 to-pink-600/30 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-play text-white text-xl ml-1"></i>
+                            </div>
+                        </div>
+                        <span class="absolute bottom-2 right-2 bg-black/60 px-2 py-1 rounded text-xs text-white">41:30</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-medium text-math-accent bg-math-accent/10 px-2 py-1 rounded">1º Ano</span>
+                            <span class="text-xs text-gray-500">Álgebra</span>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-2 group-hover:text-math-accent transition-colors">Sistemas Lineares 2x2</h3>
+                        <p class="text-sm text-gray-400">Métodos de resolução: substituição, adição e comparação.</p>
+                    </div>
+                </div>
+
+                <!-- Video Card 5 -->
+                <div class="video-card rounded-2xl overflow-hidden hover-lift group cursor-pointer">
+                    <div class="aspect-video bg-gradient-to-br from-indigo-600/30 to-blue-600/30 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-play text-white text-xl ml-1"></i>
+                            </div>
+                        </div>
+                        <span class="absolute bottom-2 right-2 bg-black/60 px-2 py-1 rounded text-xs text-white">48:00</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-medium text-math-accent bg-math-accent/10 px-2 py-1 rounded">2º Ano</span>
+                            <span class="text-xs text-gray-500">Progressões</span>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-2 group-hover:text-math-accent transition-colors">PA e PG: Teoria e Exercícios</h3>
+                        <p class="text-sm text-gray-400">Fórmulas, propriedades e problemas contextualizados.</p>
+                    </div>
+                </div>
+
+                <!-- Video Card 6 -->
+                <div class="video-card rounded-2xl overflow-hidden hover-lift group cursor-pointer">
+                    <div class="aspect-video bg-gradient-to-br from-yellow-600/30 to-orange-600/30 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-play text-white text-xl ml-1"></i>
+                            </div>
+                        </div>
+                        <span class="absolute bottom-2 right-2 bg-black/60 px-2 py-1 rounded text-xs text-white">55:10</span>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-medium text-math-accent bg-math-accent/10 px-2 py-1 rounded">3º Ano</span>
+                            <span class="text-xs text-gray-500">Geometria Analítica</span>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-2 group-hover:text-math-accent transition-colors">A Equação da Circunferência</h3>
+                        <p class="text-sm text-gray-400">Forma reduzida e geral, reconhecimento de centro e raio.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Methods Section -->
+    <section id="metodos" class="py-20 bg-math-card/30 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-math-accent/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-math-secondary/10 rounded-full blur-3xl"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="font-space text-4xl font-bold mb-4">Métodos de <span class="text-gradient">Aprendizagem</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Estratégias comprovadas cientificamente para maximizar seu rendimento em Matemática</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Method 1 -->
+                <div class="method-card rounded-2xl p-6 hover-lift">
+                    <div class="w-14 h-14 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 text-2xl mb-4">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="font-space text-xl font-bold mb-3">Aprendizagem Ativa</h3>
+                    <p class="text-gray-400 text-sm mb-4">O aluno participa ativamente, resolve problemas, discute e questiona. Cria gráficos e interpreta resultados.</p>
+                    <div class="flex items-center gap-2 text-math-accent text-sm font-medium">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Aumenta retenção e autonomia</span>
+                    </div>
+                </div>
+
+                <!-- Method 2 -->
+                <div class="method-card rounded-2xl p-6 hover-lift border-l-pink-500">
+                    <div class="w-14 h-14 rounded-xl bg-pink-500/20 flex items-center justify-center text-pink-400 text-2xl mb-4">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3 class="font-space text-xl font-bold mb-3">PBL - Problem Based Learning</h3>
+                    <p class="text-gray-400 text-sm mb-4">Aprenda resolvendo problemas contextualizados da vida real, como cálculo de juros em financiamentos.</p>
+                    <div class="flex items-center gap-2 text-pink-400 text-sm font-medium">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Conecta teoria à prática</span>
+                    </div>
+                </div>
+
+                <!-- Method 3 -->
+                <div class="method-card rounded-2xl p-6 hover-lift border-l-green-500">
+                    <div class="w-14 h-14 rounded-xl bg-green-500/20 flex items-center justify-center text-green-400 text-2xl mb-4">
+                        <i class="fas fa-redo-alt"></i>
+                    </div>
+                    <h3 class="font-space text-xl font-bold mb-3">Prática Espaçada</h3>
+                    <p class="text-gray-400 text-sm mb-4">Revisão em intervalos progressivos: hoje, amanhã, 3 dias, 1 semana. Consolida a memória de longo prazo.</p>
+                    <div class="flex items-center gap-2 text-green-400 text-sm font-medium">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Memória de longo prazo</span>
+                    </div>
+                </div>
+
+                <!-- Method 4 -->
+                <div class="method-card rounded-2xl p-6 hover-lift border-l-yellow-500">
+                    <div class="w-14 h-14 rounded-xl bg-yellow-500/20 flex items-center justify-center text-yellow-400 text-2xl mb-4">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3 class="font-space text-xl font-bold mb-3">Gamificação</h3>
+                    <p class="text-gray-400 text-sm mb-4">Quizzes, desafios e jogos digitais. Resolva enigmas de álgebra para avançar de nível.</p>
+                    <div class="flex items-center gap-2 text-yellow-400 text-sm font-medium">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Aprendizado lúdico</span>
+                    </div>
+                </div>
+
+                <!-- Method 5 -->
+                <div class="method-card rounded-2xl p-6 hover-lift border-l-purple-500">
+                    <div class="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 text-2xl mb-4">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <h3 class="font-space text-xl font-bold mb-3">Método Socrático</h3>
+                    <p class="text-gray-400 text-sm mb-4">Questionamento guiado que leva o aluno a descobrir conceitos sozinho através de perguntas estratégicas.</p>
+                    <div class="flex items-center gap-2 text-purple-400 text-sm font-medium">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Pensamento crítico</span>
+                    </div>
+                </div>
+
+                <!-- Method 6 -->
+                <div class="method-card rounded-2xl p-6 hover-lift border-l-red-500">
+                    <div class="w-14 h-14 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 text-2xl mb-4">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="font-space text-xl font-bold mb-3">Análise de Erros</h3>
+                    <p class="text-gray-400 text-sm mb-4">Revisão de provas para identificar padrões de dificuldade. Foco nos tópicos que geram mais erros.</p>
+                    <div class="flex items-center gap-2 text-red-400 text-sm font-medium">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Eficiência máxima</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pedagogical Models Table -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-space text-3xl font-bold mb-4">Modelos <span class="text-gradient">Pedagógicos</span> Eficientes</h2>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full glass-effect rounded-2xl overflow-hidden border border-white/10">
+                    <thead>
+                        <tr class="bg-math-accent/20">
+                            <th class="px-6 py-4 text-left font-space font-bold text-white">Modelo</th>
+                            <th class="px-6 py-4 text-left font-space font-bold text-white">Características</th>
+                            <th class="px-6 py-4 text-left font-space font-bold text-white">Aplicação em Matemática</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-math-accent">Construtivista</td>
+                            <td class="px-6 py-4 text-gray-300 text-sm">Aluno constrói conhecimento a partir de experiências</td>
+                            <td class="px-6 py-4 text-gray-300 text-sm">Resolver problemas contextualizados, criar modelos próprios de resolução</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-math-accent">Montessoriano</td>
+                            <td class="px-6 py-4 text-gray-300 text-sm">Aprendizado ativo e individualizado</td>
+                            <td class="px-6 py-4 text-gray-300 text-sm">Uso de materiais manipulativos (blocos, réguas, formas geométricas)</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-math-accent">Colaborativo</td>
+                            <td class="px-6 py-4 text-gray-300 text-sm">Trabalho em grupo para solução de problemas</td>
+                            <td class="px-6 py-4 text-gray-300 text-sm">Discussão de estratégias para equações, projetos de estatística</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-math-accent">Flipped Classroom</td>
+                            <td class="px-6 py-4 text-gray-300 text-sm">Conteúdo em casa, prática na escola</td>
+                            <td class="px-6 py-4 text-gray-300 text-sm">Estuda teoria em vídeo, aplica exercícios guiados com professor</td>
+                        </tr>
+                        <tr class="hover:bg-white/5 transition-colors">
+                            <td class="px-6 py-4 font-semibold text-math-accent">Blended Learning</td>
+                            <td class="px-6 py-4 text-gray-300 text-sm">Combina presencial e digital</td>
+                            <td class="px-6 py-4 text-gray-300 text-sm">Uso de softwares, quizzes online e prática em laboratório</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advantages & Test Prep -->
+    <section id="vantagens" class="py-20 bg-gradient-to-b from-math-card/50 to-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="font-space text-4xl font-bold mb-6">Vantagens <span class="text-gradient">Triângulo Potência</span></h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 rounded-full bg-math-accent/20 flex items-center justify-center text-math-accent flex-shrink-0">
+                                <i class="fas fa-graduation-cap text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2">Preparação para Provas</h3>
+                                <p class="text-gray-400 text-sm">Estratégias comprovadas: análise de erros, prática deliberada com níveis crescentes de dificuldade, testes de autoavaliação semanais e feedback imediato.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 rounded-full bg-math-secondary/20 flex items-center justify-center text-math-secondary flex-shrink-0">
+                                <i class="fas fa-clock text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2">Flexibilidade Total</h3>
+                                <p class="text-gray-400 text-sm">Estude no seu ritmo com acesso 24/7 às videoaulas. Sistema de repetição espaçada integrado para fixação ideal do conteúdo.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 flex-shrink-0">
+                                <i class="fas fa-users text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2">Suporte Personalizado</h3>
+                                <p class="text-gray-400 text-sm">Tire dúvidas diretamente com o Prof. Fabrício Alves. Grupos de estudo colaborativos e mentorias individuais.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-400 flex-shrink-0">
+                                <i class="fas fa-mobile-alt text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2">Plataforma Moderna</h3>
+                                <p class="text-gray-400 text-sm">Acesse de qualquer dispositivo. App mobile com modo offline para estudar sem internet. Interface intuitiva e gamificada.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-6 rounded-2xl bg-gradient-to-r from-math-accent/20 to-math-secondary/20 border border-math-accent/30">
+                        <div class="flex items-center gap-4 mb-4">
+                            <i class="fas fa-trophy text-3xl text-yellow-400"></i>
+                            <div>
+                                <h4 class="font-bold text-lg">Garantia de Aprovação</h4>
+                                <p class="text-sm text-gray-300">Se seguir o método e não passar, estude 1 ano grátis.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="absolute inset-0 bg-gradient-to-r from-math-accent to-math-secondary rounded-3xl blur-3xl opacity-20"></div>
+                    <div class="relative glass-effect rounded-3xl p-8 border border-white/10">
+                        <h3 class="font-space text-2xl font-bold mb-6 text-center">Comece sua Jornada</h3>
+                        
+                        <form class="space-y-4" onsubmit="event.preventDefault(); alert('Obrigado pelo interesse! Entraremos em contato em breve.');">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Nome Completo</label>
+                                <input type="text" class="w-full px-4 py-3 rounded-lg bg-black/30 border border-white/10 text-white placeholder-gray-500 focus:border-math-accent focus:outline-none transition-colors" placeholder="Seu nome">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                                <input type="email" class="w-full px-4 py-3 rounded-lg bg-black/30 border border-white/10 text-white placeholder-gray-500 focus:border-math-accent focus:outline-none transition-colors" placeholder="seu@email.com">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Ano Escolar</label>
+                                <select class="w-full px-4 py-3 rounded-lg bg-black/30 border border-white/10 text-white focus:border-math-accent focus:outline-none transition-colors">
+                                    <option>1º Ano do Ensino Médio</option>
+                                    <option>2º Ano do Ensino Médio</option>
+                                    <option>3º Ano do Ensino Médio</option>
+                                    <option>Pré-vestibular</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="w-full bg-gradient-to-r from-math-accent to-math-secondary text-white py-4 rounded-lg font-bold text-lg hover:shadow-lg hover:shadow-math-accent/40 transition-all transform hover:scale-[1.02] mt-6">
+                                Quero Começar Agora
+                            </button>
+
+                            <p class="text-center text-xs text-gray-500 mt-4">
+                                Ao se cadastrar, você concorda com nossos termos de uso.
+                            </p>
+                        </form>
+
+                        <div class="mt-6 pt-6 border-t border-white/10 flex justify-between items-center text-sm text-gray-400">
+                            <span class="flex items-center gap-2"><i class="fas fa-shield-alt text-green-400"></i> Pagamento seguro</span>
+                            <span class="flex items-center gap-2"><i class="fas fa-undo text-blue-400"></i> 7 dias de garantia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black/40 border-t border-white/10 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div class="col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <svg viewBox="0 0 100 100" class="w-8 h-8 text-math-accent">
+                            <polygon points="50,5 95,95 5,95" fill="none" stroke="currentColor" stroke-width="3"/>
+                            <text x="50" y="75" text-anchor="middle" fill="currentColor" font-size="35" font-family="Space Grotesk" font-weight="bold">P</text>
+                        </svg>
+                        <h3 class="font-space text-xl font-bold">Triângulo Potência</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4 max-w-md">
+                        Transformando a maneira de aprender Matemática no Brasil. Métodos ativos, conteúdo alinhado à BNCC e preparação completa para o ENEM e vestibulares.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-math-accent hover:text-white transition-all">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-math-accent hover:text-white transition-all">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-math-accent hover:text-white transition-all">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-4">Conteúdos</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#primeiro" class="hover:text-math-accent transition-colors">1º Ano do Ensino Médio</a></li>
+                        <li><a href="#segundo" class="hover:text-math-accent transition-colors">2º Ano do Ensino Médio</a></li>
+                        <li><a href="#terceiro" class="hover:text-math-accent transition-colors">3º Ano do Ensino Médio</a></li>
+                        <li><a href="#metodos" class="hover:text-math-accent transition-colors">Métodos de Estudo</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold mb-4">Contato</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li class="flex items-center gap-2"><i class="fas fa-envelope text-math-accent"></i> contato@triangulopotencia.com</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-phone text-math-accent"></i> (11) 99999-9999</li>
+                        <li class="flex items-center gap-2"><i class="fas fa-map-marker-alt text-math-accent"></i> São Paulo, SP</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-500">© 2026 Triângulo Potência. Todos os direitos reservados.</p>
+                <div class="flex gap-6 text-sm text-gray-500">
+                    <a href="#" class="hover:text-white transition-colors">Política de Privacidade</a>
+                    <a href="#" class="hover:text-white transition-colors">Termos de Uso</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Year Content Tabs
+        function showYear(year) {
+            // Hide all content
+            document.querySelectorAll('.year-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Show selected content
+            document.getElementById('content-' + year).classList.remove('hidden');
+            
+            // Update buttons
+            document.querySelectorAll('[id^="tab-"]').forEach(tab => {
+                tab.classList.remove('bg-math-accent', 'text-white');
+                tab.classList.add('text-gray-400');
+            });
+            
+            document.getElementById('tab-' + year).classList.remove('text-gray-400');
+            document.getElementById('tab-' + year).classList.add('bg-math-accent', 'text-white');
+        }
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    document.getElementById('mobileMenu').classList.add('hidden');
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-lg');
+                nav.classList.add('bg-math-dark/90');
+            } else {
+                nav.classList.remove('shadow-lg');
+                nav.classList.remove('bg-math-dark/90');
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.querySelectorAll('.hover-lift, .video-card, .method-card').forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = `all 0.6s ease ${index * 0.1}s`;
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
